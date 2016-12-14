@@ -15,7 +15,7 @@
                     <div class="title_right">
                         <div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right">
                           <div class="input-group">
-                              <a href="{{URL::to('admin/category/add')}}" class="btn btn-danger pull-right" href="">Add Category</a>
+                              <a href="{{URL::to('admin/news/add')}}" class="btn btn-danger pull-right" href="">Add News</a>
                           </div>
                         </div>
                       </div>
@@ -27,9 +27,10 @@
                     <table id="datatable" class="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
+                                <th>Image</th>
+                                <th>Title</th>
                                 <th>Slug</th>
+                                <th>Category</th>
                                 <th>Date</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -38,21 +39,22 @@
                         <tbody>
                             
                             <?php
-                            if($categories){
-                                foreach($categories as $key=>$value){
+                            if($data){
+                                foreach($data as $key=>$value){
                                     ?>
                                         <tr>
-                                            <td><?php echo $value->id; ?></td>
-                                            <td><?php echo $value->name; ?></td>
+                                            <td><img src="<?php echo url('upload/'.$value->image); ?>" width="100"></td>
+                                            <td><?php echo $value->title; ?></td>
                                             <td><?php echo $value->slug; ?></td>
+                                            <td><?php echo $value->category->name; ?></td>
                                             <td><?php echo $value->created_at; ?></td>
                                             <td><?php echo $value->status; ?></td>
                                             <td>
-                                                <a href="<?php echo url('admin/category/edit/'.$value->id);?>" class="btn btn-primary btn-xs">
+                                                <a href="<?php echo url('admin/news/edit/'.$value->id);?>" class="btn btn-primary btn-xs">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                 </a>
                                                 
-                                                <a href="<?php echo url('admin/category/delete/'.$value->id);?>" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure?')">
+                                                <a href="<?php echo url('admin/news/delete/'.$value->id);?>" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure?')">
                                                     <span class="glyphicon glyphicon-trash"></span>
                                                 </a>
                                                 
@@ -60,12 +62,6 @@
                                         </tr>
                                     <?php
                                 }
-                            }else{
-                                ?>
-                                    <tr>
-                                        <td colspan="5">No category registered yet</td>
-                                    </tr>
-                                <?php
                             }
                             ?>
                             

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
+
 use App\News;
+use App\Category;
 use Illuminate\Http\Request;
 use Validator,
     Redirect;
@@ -12,31 +13,40 @@ class newsController extends Controller {
 
     // list all category
     public function index() {
-        $categories = Category::all();
-        return view('admin/news/index', array('categories' => $categories));
+//        $data = News::all();
+        $data = News::with('category')->get();
+//        echo "<pre>";
+//        print_r($data);
+//        exit;
+        return view('admin/news/index', array('data' => $data));
     }
 
     /* start add category function  */
 
     public function add() {
-        return view('admin/news/add');
+        $categories = Category::all();
+        return view('admin/news/add' , array('categories'=>$categories));
     }
 
     public function postadd(Request $request) {
         $data = $request->all();
-
-        $check = Validator::make($data, Category::$rules);
+        $check = Validator::make($data, News::$rules);
         // if the validator fails, redirect back to the form
         if ($check->fails()) {
             return Redirect::back()
                             ->withErrors($check) // send back all errors to the login form
                             ->withInput();
         } else {
-            $category = new Category();
-            $category->name = $request->input('name');
-            $category->slug = $request->input('slug');
-            $category->status = $request->input('status');
-            $categories = $category->save();
+            $imageName = time().'.'.$request->image->getClientOriginalExtension();
+            $request->image->move(public_path('upload'), $imageName);
+            $data = new News();
+            $data->title = $request->input('title');
+            $data->slug = $request->input('slug');
+            $data->description = $request->input('description');
+            $data->category_id = $request->input('category_id');
+            $data->status = $request->input('status');
+            $data->image = $imageName;
+            $datasaved = $data->save();
             return redirect('admin/news');
         }
     }

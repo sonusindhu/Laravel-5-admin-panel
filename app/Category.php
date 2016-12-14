@@ -10,5 +10,9 @@ class Category extends Model {
         'name' => 'required|max:255',
         'slug' => 'required|unique:categories|max:255',
     );
+    
+    public function news(){
+        return $this->hasMany('App\News');
+    }
 
 }
