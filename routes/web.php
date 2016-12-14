@@ -25,6 +25,15 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/category/edit/{id}', 'categoryController@edit');
     Route::post('/category/postedit/{id}', 'categoryController@postedit');
     Route::get('/category/delete/{id}', 'categoryController@delete');
+    
+   
+    Route::get('/news', 'newsController@index');
+    Route::get('/news/add', 'newsController@add');
+    Route::post('/news/postadd', 'newsController@postadd');
+    Route::get('/news/edit/{id}', 'newsController@edit');
+    Route::post('/news/postedit/{id}', 'newsController@postedit');
+    Route::get('/news/delete/{id}', 'newsController@delete');
+    
 });
 
 // Logging in and out
