@@ -11,7 +11,7 @@
         <div class="col-md-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2> News List</h2>
+                    <h2> Featured News List</h2>
                     <div class="title_right">
                         <div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right">
                           <div class="input-group">

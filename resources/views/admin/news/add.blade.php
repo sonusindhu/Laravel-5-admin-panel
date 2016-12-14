@@ -84,7 +84,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Set Featured</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <select class="form-control" name="status">
+                                <select class="form-control" name="featured">
                                     <option value="0">No</option>
                                     <option value="1" >Yes</option>
                                 </select>

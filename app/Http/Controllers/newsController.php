@@ -13,11 +13,7 @@ class newsController extends Controller {
 
     // list all category
     public function index() {
-//        $data = News::all();
         $data = News::with('category')->get();
-//        echo "<pre>";
-//        print_r($data);
-//        exit;
         return view('admin/news/index', array('data' => $data));
     }
 
@@ -39,14 +35,14 @@ class newsController extends Controller {
         } else {
             $imageName = time().'.'.$request->image->getClientOriginalExtension();
             $request->image->move(public_path('upload'), $imageName);
-            $data = new News();
-            $data->title = $request->input('title');
-            $data->slug = $request->input('slug');
-            $data->description = $request->input('description');
-            $data->category_id = $request->input('category_id');
-            $data->status = $request->input('status');
-            $data->image = $imageName;
-            $datasaved = $data->save();
+            $datapost = new News();
+            $datapost->title = $request->input('title');
+            $datapost->slug = $request->input('slug');
+            $datapost->description = $request->input('description');
+            $datapost->category_id = $request->input('category_id');
+            $datapost->status = $request->input('status');
+            $datapost->image = $imageName;
+            $datasaved = $datapost->save();
             return redirect('admin/news');
         }
     }
@@ -56,15 +52,19 @@ class newsController extends Controller {
     /* edit category function  */
 
     public function edit($id) {
-        $category = Category::find($id);
-        return view('admin/news/edit', array('category' => $category));
+        $category = Category::all();
+        $data = News::with('category')->find($id);
+        return view('admin/news/edit', array('categories' => $category , 'data'=>$data));
     }
 
     public function postedit(Request $request, $id) {
         $data = $request->all();
         $check = Validator::make($data, array(
-                    'name' => 'required|max:255',
-                    'slug' => 'required|unique:categories,slug,' . $id . '|max:255',
+                    'title' => 'required|max:255',
+                    'slug' => 'required|unique:news,slug,' . $id . '|max:255',
+                    'description' => 'required',
+                    'category_id' => 'required',
+//                    'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ));
         // if the validator fails, redirect back to the form
         if ($check->fails()) {
@@ -72,11 +72,21 @@ class newsController extends Controller {
                             ->withErrors($check) // send back all errors to the login form
                             ->withInput();
         } else {
-            $category = Category::find($id);
-            $category->name = $request->input('name');
-            $category->slug = $request->input('slug');
-            $category->status = $request->input('status');
-            $categories = $category->save();
+            $datapost = News::find($id);
+            $imageName = $datapost->image;
+            if($request->file('image')){
+                $imageName = time().'.'.$request->image->getClientOriginalExtension();
+                $request->image->move(public_path('upload'), $imageName);
+            }
+            
+            $datapost->title = $request->input('title');
+            $datapost->slug = $request->input('slug');
+            $datapost->description = $request->input('description');
+            $datapost->category_id = $request->input('category_id');
+            $datapost->status = $request->input('status');
+            $datapost->featured = $request->input('featured');
+            $datapost->image = $imageName;
+            $datasaved = $datapost->save();
             return redirect('admin/news');
         }
     }
@@ -86,9 +96,18 @@ class newsController extends Controller {
     /* delete category function */
 
     public function delete($id) {
-        $category = Category::find($id);
-        $category->delete();
+        $data = News::find($id);
+        $data->delete();
         return redirect('admin/news');
+    }
+
+    /* end delete category function */
+    
+    /* delete category function */
+
+    public function featured() {
+        $data = News::with('category')->where('featured' , 1)->get();
+        return view('admin/news/featured' , array('data'=>$data));
     }
 
     /* end delete category function */

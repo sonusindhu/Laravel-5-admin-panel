@@ -11,13 +11,13 @@
         <div class="col-md-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2> Edit Category :   <?php echo $category->name?></h2>
+                    <h2> Edit Category : <?php echo $data->category->name; ?></h2>
 
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
 
-                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="<?php echo url('/admin/category/postedit',$category->id)?>" method="post">
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="<?php echo url('/admin/news/postedit/'.$data->id) ?>" method="post" enctype="multipart/form-data">
                         {{ csrf_field() }}
 
                         <div class="form-group">
@@ -30,17 +30,52 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Name <span class="required">*</span>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Category</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <select class="form-control" name="category_id">
+                                    <?php
+                                    $selected = "";
+                                    foreach($categories as $category){
+                                        if($category->id==$data->category->id){
+                                            $selected = "selected";
+                                        }else {
+                                            $selected = "";
+                                        }
+                                        echo '<option value="'.$category->id.'" '.$selected.'>'.$category->name.'</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Title <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="first-name" required="required" value="<?php echo $category->name?>" name="name" class="form-control col-md-7 col-xs-12">
+                                <input type="text" id="first-name" required="required" name="title" class="form-control col-md-7 col-xs-12" value="{{$data->title}}">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">slugs <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="last-name" name="slug" value="<?php echo $category->slug?>" required="required" class="form-control col-md-7 col-xs-12">
+                                <input type="text" id="last-name" name="slug" required="required" class="form-control col-md-7 col-xs-12" value="{{$data->slug}}">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Description <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <textarea rows="5" class="form-control col-md-7 col-xs-12" id="description" name="description">{{$data->description}}</textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Image
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <img src="<?php echo url('upload/'.$data->image);?>" width="100">
+                                <input type="file" name="image" >
                             </div>
                         </div>
 
@@ -48,8 +83,17 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Status</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <select class="form-control" name="status">
-                                    <option value="1" <?php if($category->status==1) { echo "selected='selected'"; }?>>Publish</option>
-                                    <option value="0" <?php if($category->status==0) { echo "selected='selected'"; }?>>Un-Publish</option>
+                                    <option value="1" <?php if($data->status){ echo "selected"; } ?>>Publish</option>
+                                    <option value="0" <?php if(!$data->status){ echo "selected"; } ?>>Un-Publish</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Set Featured</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <select class="form-control" name="featured">
+                                    <option value="0" <?php if(!$data->featured){ echo "selected"; } ?>>No</option>
+                                    <option value="1" <?php if($data->featured){ echo "selected"; } ?>>Yes</option>
                                 </select>
                             </div>
                         </div>

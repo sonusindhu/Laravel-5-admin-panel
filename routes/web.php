@@ -33,6 +33,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/news/edit/{id}', 'newsController@edit');
     Route::post('/news/postedit/{id}', 'newsController@postedit');
     Route::get('/news/delete/{id}', 'newsController@delete');
+    Route::get('/news/featured', 'newsController@featured');
     
 });
 
